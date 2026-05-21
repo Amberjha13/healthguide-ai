@@ -52,6 +52,7 @@ class Orchestrator extends EventEmitter {
       steps: allSteps,
       toolsUsed: Array.from(allToolsUsed),
       safetyApplied: safetyResult.safetyApplied,
+      hadDosageWarning: safetyResult.hadDosageWarning || false,
       concerns: safetyResult.concerns,
     };
   }

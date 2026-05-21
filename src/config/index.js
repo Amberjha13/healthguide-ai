@@ -11,5 +11,8 @@ module.exports = {
   mongodb: {
     uri: process.env.MONGODB_URI || 'mongodb://localhost:27017/healthguide',
   },
-  port: parseInt(process.env.PORT || '3000', 10),
+  jwt: {
+    secret: process.env.JWT_SECRET || 'dev-secret-change-in-production',
+  },
+  port: parseInt(process.env.PORT || '3001', 10),
 };

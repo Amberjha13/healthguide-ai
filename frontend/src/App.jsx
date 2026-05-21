@@ -7,7 +7,7 @@ import { useChat } from './hooks/useChat.js';
 import { useSessions } from './hooks/useSessions.js';
 import { fetchSession } from './api/client.js';
 
-export default function App() {
+export default function App({ auth }) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const chat = useChat();
   const { sessions, loading: sessionsLoading, reload: reloadSessions } = useSessions();
@@ -56,6 +56,10 @@ export default function App() {
             ☰
           </button>
           <h1 className="app-title">HealthGuide AI</h1>
+          <div className="header-user">
+            <span className="header-username">👤 {auth.username}</span>
+            <button className="logout-btn" onClick={auth.logout}>Sign out</button>
+          </div>
         </div>
 
         <ChatWindow

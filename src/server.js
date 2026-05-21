@@ -9,23 +9,31 @@ const memory = require('./memory/sessionMemory');
 const chatRouter = require('./api/routes/chat');
 const sessionsRouter = require('./api/routes/sessions');
 const healthRouter = require('./api/routes/health');
+const authRoutes = require('./auth/authRoutes');
+const authMiddleware = require('./auth/authMiddleware');
 const errorHandler = require('./api/middleware/errorHandler');
 const { chatRateLimiter } = require('./api/middleware/rateLimiter');
+
+const corsOrigin = process.env.FRONTEND_URL || 'http://localhost:5173';
 
 const app = express();
 const server = http.createServer(app);
 
 // eslint-disable-next-line no-unused-vars
 const io = new Server(server, {
-  cors: { origin: 'http://localhost:5173', methods: ['GET', 'POST'] },
+  cors: { origin: corsOrigin, methods: ['GET', 'POST'] },
 });
 
-app.use(cors({ origin: 'http://localhost:5173' }));
+app.use(cors({ origin: corsOrigin }));
 app.use(express.json());
 
+// Public routes
 app.use('/api/health', healthRouter);
-app.use('/api/chat', chatRateLimiter, chatRouter);
-app.use('/api/sessions', sessionsRouter);
+app.use('/api/auth', authRoutes);
+
+// Protected routes
+app.use('/api/chat', authMiddleware, chatRateLimiter, chatRouter);
+app.use('/api/sessions', authMiddleware, sessionsRouter);
 
 app.use(errorHandler);
 

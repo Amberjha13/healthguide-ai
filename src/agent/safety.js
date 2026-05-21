@@ -6,7 +6,10 @@ const client = new Anthropic({ apiKey: config.anthropic.apiKey });
 const DOSAGE_PATTERN = /\b\d+\.?\d*\s*(?:mg|mcg|g|ml|units?|iu)\b/i;
 
 const DISCLAIMER =
-  '\n\n*This information is for educational purposes only. Please consult a qualified healthcare professional before making any medical decisions.*';
+  '\n\n⚕️ This information is for educational purposes only. Always consult a qualified healthcare professional before making medical decisions.';
+
+const DOSAGE_WARNING =
+  '\n\n⚠️ Dosage information varies by individual. Never self-medicate based on AI responses.';
 
 async function validate(response) {
   const hasDosage = DOSAGE_PATTERN.test(response);
@@ -53,11 +56,15 @@ Do NOT flag general educational information about drugs, costs, or insurance.`,
   }
 
   const safetyApplied = flagged || hasDosage;
-  const finalResponse = response + DISCLAIMER;
+  let finalResponse = response + DISCLAIMER;
+  if (hasDosage) {
+    finalResponse += DOSAGE_WARNING;
+  }
 
   return {
     response: finalResponse,
     safetyApplied,
+    hadDosageWarning: hasDosage,
     concerns,
     flagged,
   };

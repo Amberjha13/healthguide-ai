@@ -1,5 +1,10 @@
 import { useState, useRef, useCallback } from 'react';
 
+function authHeaders() {
+  const token = localStorage.getItem('hg_token');
+  return token ? { Authorization: `Bearer ${token}` } : {};
+}
+
 export function useChat() {
   const [messages, setMessages] = useState([]);
   const [thoughts, setThoughts] = useState([]);
@@ -34,7 +39,7 @@ export function useChat() {
     try {
       const response = await fetch('/api/chat', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...authHeaders() },
         body: JSON.stringify({ query, sessionId: sid }),
         signal: controller.signal,
       });
