@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react';
 
 const TOKEN_KEY = 'hg_token';
 const USER_KEY = 'hg_user';
+const BASE = (import.meta.env.VITE_API_URL || '') + '/api';
 
 export function useAuth() {
   const [token, setToken] = useState(() => localStorage.getItem(TOKEN_KEY));
@@ -15,7 +16,7 @@ export function useAuth() {
   };
 
   const login = useCallback(async (uname, password) => {
-    const res = await fetch('/api/auth/login', {
+    const res = await fetch(`${BASE}/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username: uname, password }),
@@ -27,7 +28,7 @@ export function useAuth() {
   }, []);
 
   const register = useCallback(async (uname, password) => {
-    const res = await fetch('/api/auth/register', {
+    const res = await fetch(`${BASE}/auth/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username: uname, password }),

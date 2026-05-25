@@ -1,5 +1,7 @@
 import { useState, useRef, useCallback } from 'react';
 
+const BASE = (import.meta.env.VITE_API_URL || '') + '/api';
+
 function authHeaders() {
   const token = localStorage.getItem('hg_token');
   return token ? { Authorization: `Bearer ${token}` } : {};
@@ -37,7 +39,7 @@ export function useChat() {
     abortRef.current = controller;
 
     try {
-      const response = await fetch('/api/chat', {
+      const response = await fetch(`${BASE}/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', ...authHeaders() },
         body: JSON.stringify({ query, sessionId: sid }),
