@@ -2,6 +2,6 @@
   "build": { "builder": "nixpacks" },
   "deploy": {
     "startCommand": "node src/server.js",
-    "restartPolicyType": "on-failure"
+    "restartPolicyType": "ON_FAILURE"
   }
 }
